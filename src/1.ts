@@ -12,4 +12,4 @@ class Student {
   ) {}
 }
 
-export {};
+export {Student};

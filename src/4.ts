@@ -1,41 +1,56 @@
-class Key { 
-}
+class Key {
+  private signature: number;
 
-class MyHouse {
-  private doorIsOpen: boolean = false;
-
-  constructor(private key: Key) {   
+  constructor() {
+    this.signature = Math.random();
   }
 
-  openDoor(key: Key): void {
-    if (this.key === key) {
-      this.doorIsOpen = true;
-      console.log('Двері відчинені.');
-    } else {
-      console.log('Неправильний ключ. Двері не відкрилися.');
-    }
-  }
-
-  comeIn(person: Person): void {
-    if (this.doorIsOpen) {
-      console.log(`${person.getName()} входить у будинок.`);
-    } else {
-      console.log('Двері закриті. Спробуйте відкрити двері ключем.');
-    }
+  getSignature(): number {
+    return this.signature;
   }
 }
 
 class Person {
-  constructor(private key: Key) {   
+  private key: Key;
+
+  constructor(key: Key) {
+    this.key = key;
   }
 
   getKey(): Key {
     return this.key;
   }
+}
 
-  getName(): string {
-    
-    return 'John Doe';
+abstract class House {
+  protected door: boolean = false;
+  protected tenants: Person[] = [];
+  protected key: Key;
+
+  constructor(key: Key) {
+    this.key = key;
+  }
+
+  abstract openDoor(key: Key): void;
+
+  comeIn(person: Person): void {
+    if (this.door) {
+      this.tenants.push(person);
+      console.log('Двері відчинені. Особа зайшла в будинок.');
+    } else {
+      console.log('Двері закриті. Відкрийте двері спочатку.');
+    }
+  }
+}
+
+class MyHouse extends House {
+  openDoor(key: Key): void {
+    if (this.key.getSignature() === key.getSignature()) {
+      this.door = true;
+      console.log('Двері відчинені.');
+    } else {
+      console.log('Неправильний ключ. Двері залишаються закритими.');
+    }
   }
 }
 
